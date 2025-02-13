@@ -35,30 +35,30 @@ class MessageHelper extends Base
         $audiences = array();
 
         $owner = $this->userModel->getById($eventData["task"]["owner_id"]);
-        if (!empty($owner) && !empty($owner['email']))
+        if (!empty($owner) && !empty($owner['username']))
         {
-            $audiences[] = $owner['email'];
+            $audiences[] = $owner['username'];
         }
         
         if (!$assigneeOnly)
         {
             $projectOwner = $this->userModel->getById($project["owner_id"]);
-            if (!empty($projectOwner) && !empty($projectOwner['email']))
+            if (!empty($projectOwner) && !empty($projectOwner['username']))
             {
-                $audiences[] = $projectOwner['email'];
+                $audiences[] = $projectOwner['username'];
             }
 
             $creator = $this->userModel->getById($eventData["task"]["creator_id"]);
-            if (!empty($creator) && !empty($creator['email'])) {
-                $audiences[] = $creator['email'];
+            if (!empty($creator) && !empty($creator['username'])) {
+                $audiences[] = $creator['username'];
             }
 
             $multimembers = isset($this->multiselectMemberModel) ? $this->multiselectMemberModel->getMembers($eventData["task"]['owner_ms']) : null;
             if (!empty($multimembers)){
                 foreach ($multimembers as $member) {
                     $user = $this->userModel->getById($member['id']);
-                    if (!empty($user['email'])) {
-                        $audiences[] = $user['email'];
+                    if (!empty($user['username'])) {
+                        $audiences[] = $user['username'];
                     }
                 }
             }
@@ -67,8 +67,8 @@ class MessageHelper extends Base
             if (!empty($groupmembers)){
                 foreach ($groupmembers as $member) {
                     $user = $this->userModel->getById($member['id']);
-                    if (!empty($user['email'])) {
-                        $audiences[] = $user['email'];
+                    if (!empty($user['username'])) {
+                        $audiences[] = $user['username'];
                     }
                 }
             }

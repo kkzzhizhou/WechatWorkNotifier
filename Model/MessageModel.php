@@ -2,7 +2,7 @@
 
 namespace Kanboard\Plugin\WechatWorkNotifier\Model;
 
-class MessageModel
+class TemplateCardMessageModel
 {
     public static function create($taskId, $title, $subTitle, $key, $desc, $quoteTitle, $quote, $contentList, $taskLink, $projectLink){
         $message = array();
@@ -52,6 +52,38 @@ class MessageModel
 
         $message["template_card"]["card_action"]["type"]                    = "1";
         $message["template_card"]["card_action"]["url"]                     = $taskLink;
+
+        return $message;
+    }
+}
+
+class MessageModel
+{
+    public static function create($taskId, $title, $subTitle, $key, $desc, $quoteTitle, $quote, $contentList, $taskLink, $projectLink){
+        $message = array();
+        $template = <<<EOD
+项目名称：\t{{project_name}}
+通知类型：\t{{notification_type}}
+任务描述：\t{{task_description}}
+开始时间：\t{{start_time}}
+到期时间：\t{{due_time}}
+任务作者：\t{{task_author}}
+查看任务：\t<a href="{{task_link}}">任务链接</a>
+打开看板：\t<a href="{{board_link}}">看板链接</a>
+EOD;
+        
+        $replacements = array(
+            '{{project_name}}' => $title,
+            '{{notification_type}}' => '-',
+            '{{task_description}}' => '-',
+            '{{start_time}}' => '-', 
+            '{{due_time}}' => '-', 
+            '{{task_author}}' => '-',
+            '{{task_link}}' => $taskLink,
+            '{{board_link}}' => $projectLink,
+        );
+        $message = strtr($template, $replacements);
+        $message['safe'] = 0;
 
         return $message;
     }
