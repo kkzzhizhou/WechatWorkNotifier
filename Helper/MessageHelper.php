@@ -73,7 +73,7 @@ class MessageHelper extends Base
                 }
             }
         }
-
+        // return array_unique(['zzz']);
         return array_unique($audiences);
     }
 

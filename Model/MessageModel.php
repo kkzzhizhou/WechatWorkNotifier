@@ -64,25 +64,32 @@ class MessageModel
         $template = <<<EOD
 项目名称：\t{{project_name}}
 通知类型：\t{{notification_type}}
-任务描述：\t{{task_description}}
-开始时间：\t{{start_time}}
-到期时间：\t{{due_time}}
-任务作者：\t{{task_author}}
-查看任务：\t<a href="{{task_link}}">任务链接</a>
+任务名称：\t{{task_name}}{{task_description_line}}{{task_change}}{{task_content_list}}
 打开看板：\t<a href="{{board_link}}">看板链接</a>
+查看任务：\t<a href="{{task_link}}">任务链接</a>
 EOD;
-        
+        $message['msgtype'] = 'text';
+        $message['agentid'] = $GLOBALS["WWN_CONFIGS"]['AGENTID'];
+        $taskDescriptionLine = $desc ? "\n任务描述：\t$desc\n" : "";
+        $taskChange = $quoteTitle ? "\n$quoteTitle\t$quote" : "";
+        $resultString = "";
+        if (isset($contentList)) {
+            foreach ($contentList as $k => $v) {
+                $resultString .= "\n$k: \t$v";
+            }
+        }
+            
         $replacements = array(
             '{{project_name}}' => $title,
-            '{{notification_type}}' => '-',
-            '{{task_description}}' => '-',
-            '{{start_time}}' => '-', 
-            '{{due_time}}' => '-', 
-            '{{task_author}}' => '-',
+            '{{notification_type}}' => $key,
+            '{{task_name}}' => "#$taskId $subTitle",
+            '{{task_description_line}}' => $taskDescriptionLine,
+            '{{task_change}}' => $taskChange,
+            '{{task_content_list}}' => $resultString,
             '{{task_link}}' => $taskLink,
             '{{board_link}}' => $projectLink,
         );
-        $message = strtr($template, $replacements);
+        $message['text']['content'] = strtr($template, $replacements);
         $message['safe'] = 0;
 
         return $message;
