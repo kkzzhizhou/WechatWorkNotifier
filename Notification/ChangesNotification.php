@@ -15,7 +15,7 @@ class ChangesNotification extends Base implements NotificationInterface
     public function notifyProject(array $project, $eventName, array $eventData)
     {
         // Send task changes to task members
-        if ($eventName === TaskModel::EVENT_UPDATE)
+        if ($eventName === TaskModel::EVENT_UPDATE || $eventName === TaskModel::EVENT_CLOSE)
         {
             // fix the translations unloading bug
             Translator::load($this->languageModel->getCurrentLanguage(), implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', 'Locale')));

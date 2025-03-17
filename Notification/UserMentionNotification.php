@@ -25,7 +25,7 @@ class UserMentionNotification extends Base implements NotificationInterface
 
             $this->helper->message->send
             (
-                $audiences  = $eventData["mention"]["email"],
+                $audiences  = $eventData["mention"]["username"],
                 $message    = MessageModel::create
                 (
                     $taskId         = $eventData["task"]["id"], 
